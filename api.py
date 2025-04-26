@@ -11,7 +11,7 @@ api = Api(app, version='1.0', title='API de Predicción',
           description='Predicciones del modelo de Árbol de Decisión para canciones')
 
 # Cargar el modelo entrenado
-modelo = joblib.load('modelo_dt.pkl')
+modelo = joblib.load('decision_tree_model.pkl')
 
 # Definir el namespace
 ns = api.namespace('predict', description='Predicciones del modelo')
