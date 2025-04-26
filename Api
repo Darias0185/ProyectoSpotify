@@ -1,0 +1,31 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_restx import Api, Resource
+import joblib
+import numpy as np
+import pandas as pd
+
+# Inicialización
+app = Flask(__name__)
+CORS(app)
+api = Api(app)
+
+# Cargar el modelo
+modelo = joblib.load('decision_tree_model.pkl')
+
+# Define el namespace
+ns = api.namespace('predict', description='Predicciones del modelo')
+
+# Define el recurso
+@ns.route('/')
+class Predict(Resource):
+    def post(self):
+        data = request.get_json()
+        # Convertir los datos a DataFrame
+        input_df = pd.DataFrame([data])
+        # Realizar la predicción
+        pred = modelo.predict(input_df)
+        return jsonify({'prediction': pred.tolist()})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
